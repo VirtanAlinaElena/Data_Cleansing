@@ -58,7 +58,8 @@ List addLast(List l, int ts, double val)
 }
 
 // adauga un element in interiorul listei
-List addItem(List l, int ts, double val) {
+List addItem(List l, int ts, double val) 
+{
 	List temp;
 
 	temp = l;
@@ -71,7 +72,6 @@ List addItem(List l, int ts, double val) {
 	new_element->prev = temp; 
 	temp->next = new_element;
 
-	//free(temp);
 	return l;
 }
 
@@ -88,7 +88,8 @@ List search(List l, double val)
 }
 
 // sterge un element din lista
-List deleteItem(List l, double val) {
+List deleteItem(List l, double val) 
+{
 	List temp, prev;
 
 
@@ -124,7 +125,19 @@ List sortare(List l)
 {
 	double aux1;
 	int aux2;
-	List tmp1, tmp2;
+	List tmp1, tmp2;{
+		temp = l;
+		while (temp->next != NULL)
+			temp = temp->next;
+		temp->next = newElement;
+		newElement->prev = temp;
+		return l;
+	}
+}
+
+// adauga un element in interiorul listei
+List addItem(List l, int ts, double val) 
+{
 	tmp1 = l;
 	while (tmp1 != NULL)
 	{
@@ -146,13 +159,13 @@ List sortare(List l)
 		tmp1 = tmp1->next;
 	}
 
-	//free(tmp1);
-	//free(tmp2);
+	
 	return l;
 }
 
 // sterge toata lista
-List deleteList(List l) {
+List deleteList(List l) 
+{
 	List temp;
 	while (l != NULL)
 	{
@@ -194,6 +207,7 @@ List eliminare_exceptii(List l, int k, int *nrPerechi)
 		tmp = tmp->next;
 	}
 
+	tmp = lst;
 	lst = lst->next->next;
 	n = *nrPerechi;
 	for (i = 0; i < n - k + 1; i++)
@@ -215,6 +229,7 @@ List eliminare_exceptii(List l, int k, int *nrPerechi)
 		lst = lst->next;
 	}
 
+	deleteList(tmp);
 	return l;
 }
 
@@ -240,6 +255,8 @@ List filtrare_medie_aritmetica(List l, int k, int *nrPerechi)
 		tmp = tmp->next;
 	}
 	*nrPerechi = *nrPerechi - k + 1;
+
+	deleteList(l);
 	return lst;
 }
 
@@ -277,6 +294,7 @@ List filtrare_mediana(List l, int k, int* nrPerechi)
 	}
 
 	*nrPerechi = *nrPerechi - k + 1;
+	deleteList(l);
 	return lst;
 }
 
@@ -296,6 +314,7 @@ List uniformizare(List l)
 		}
 		tmp = tmp->next;
 	}
+
 	return l;
 }
 
@@ -303,7 +322,7 @@ List completare_date(List l, int *nrPerechi)
 {
 	// cele mai apropiate elemente de marginile intervalului se afla spre
 	// finalul listelor right si left
-	List tmp; // pentru parcurgerea listei l
+	List tmp, lst; // pentru parcurgerea listei l
 	List list; // noua lista cu valorile completate
 	int listPerechi = 0, listTimestamp, k = 3, i;
 	double w0, w1, w2, sum = 0, listValue, C, sumleft, sumright;
@@ -330,12 +349,16 @@ List completare_date(List l, int *nrPerechi)
 		{
 			listTimestamp = tmp->prev->timestamp + 200;
 
+			lst = list;
+			while (lst->next != NULL)
+				lst = lst->next;
+
 			while (listTimestamp < tmp->timestamp)
 			{
-				C = (double)(listTimestamp - tmp->prev->timestamp) / (tmp->timestamp - 
-					tmp->prev->timestamp);
-				sumleft =  w0 * tmp->prev->prev->prev->value +
-				 	w1 * tmp->prev->prev->value + w2 * tmp->prev->value;
+				C = (double)(listTimestamp - lst->timestamp) / (tmp->timestamp - 
+					lst->timestamp);
+				sumleft =  w0 * lst->prev->prev->value +
+				 	w1 * lst->prev->value + w2 * lst->value;
 				sumright = w0 * tmp->next->next->value + w1 * tmp->next->value + 
 					w2 * tmp->value;
  				listValue = (1 - C) * sumleft + C * sumright;
@@ -350,6 +373,7 @@ List completare_date(List l, int *nrPerechi)
 		tmp = tmp->next;
 	}
 	*nrPerechi = listPerechi;
+	deleteList(l);
 	return list;
 }
 
@@ -360,7 +384,7 @@ void bonus(List l, char text[])
 	char p[30];
 	int i, x, k, aux;
 	List tmp, end; // pentru parcurgerea listelor
-	List lst, list;
+	List lst, list, q, endp;
 	strcpy(p, text + 4);
 	x = atoi(p); // intervalul de timp
 
@@ -375,7 +399,7 @@ void bonus(List l, char text[])
 		aux = tmp->value / x;
 		aux = aux * x - x;
 	}
-	//printf("%d ", aux);
+
 	// lista lst va retine in campul timestamp numarul de valori din intervalul
 	// respectiv, iar in campul value, limita inferioara a intervalului
 	lst = initList(1, (double)aux);
@@ -400,6 +424,7 @@ void bonus(List l, char text[])
 	
 		// gasesc sfarsitul listei
 		end = lst;
+		//endp = lst;
 		while(end->next != NULL)
 			end = end->next;
 		// cazul in care in intervalul in care se afla tmp->value
@@ -423,12 +448,16 @@ void bonus(List l, char text[])
 				
 		tmp = tmp->next;
 	}
+
+	q = lst;
 	while (lst != NULL)
 	{
 		printf("[%d, %d] %d\n", (int)lst->value, (int)lst->value + x, 
 					lst->timestamp);
 		lst = lst->next;
 	}
+
+	deleteList(q);
 }
 
 int main(int args, char **argv)
@@ -487,6 +516,6 @@ int main(int args, char **argv)
 						bonus(l, argv[i]);
 	}
 
-	//free(l);
+	deleteList(l);
 	return 0;
 }
