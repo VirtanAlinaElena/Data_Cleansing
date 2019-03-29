@@ -151,35 +151,6 @@ List sortare(List l)
 	return l;
 }
 
-// adauga un element in interiorul listei
-/*List addItem(List l, int ts, double val) 
-{
-	tmp1 = l;
-	while (tmp1 != NULL)
-	{
-		tmp2 = tmp1->next;
-		while (tmp2 != NULL)
-		{
-			if (tmp1->value > tmp2->value)
-			{
-				aux1 = tmp1->value;
-				tmp1->value = tmp2->value;
-				tmp2->value = aux1;
-
-				aux2 = tmp1->timestamp;
-				tmp1->timestamp = tmp2->timestamp;
-				tmp2->timestamp = aux2;
-			}
-			tmp2 = tmp2->next;
-		}
-		tmp1 = tmp1->next;
-	}
-
-	
-	return l;
-}
-*/
-
 // sterge toata lista
 void deleteList(List l) 
 {
