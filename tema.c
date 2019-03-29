@@ -125,19 +125,7 @@ List sortare(List l)
 {
 	double aux1;
 	int aux2;
-	List tmp1, tmp2;{
-		temp = l;
-		while (temp->next != NULL)
-			temp = temp->next;
-		temp->next = newElement;
-		newElement->prev = temp;
-		return l;
-	}
-}
-
-// adauga un element in interiorul listei
-List addItem(List l, int ts, double val) 
-{
+	List tmp1, tmp2;
 	tmp1 = l;
 	while (tmp1 != NULL)
 	{
@@ -163,8 +151,37 @@ List addItem(List l, int ts, double val)
 	return l;
 }
 
+// adauga un element in interiorul listei
+/*List addItem(List l, int ts, double val) 
+{
+	tmp1 = l;
+	while (tmp1 != NULL)
+	{
+		tmp2 = tmp1->next;
+		while (tmp2 != NULL)
+		{
+			if (tmp1->value > tmp2->value)
+			{
+				aux1 = tmp1->value;
+				tmp1->value = tmp2->value;
+				tmp2->value = aux1;
+
+				aux2 = tmp1->timestamp;
+				tmp1->timestamp = tmp2->timestamp;
+				tmp2->timestamp = aux2;
+			}
+			tmp2 = tmp2->next;
+		}
+		tmp1 = tmp1->next;
+	}
+
+	
+	return l;
+}
+*/
+
 // sterge toata lista
-List deleteList(List l) 
+void deleteList(List l) 
 {
 	List temp;
 	while (l != NULL)
@@ -236,7 +253,7 @@ List eliminare_exceptii(List l, int k, int *nrPerechi)
 List filtrare_medie_aritmetica(List l, int k, int *nrPerechi)
 {
 	List lst, tmp;
-	int n, i, ok;
+	int i, ok;
 	double avg;
 	ok = 0; // noua lista nu are niciun element in ea
 	tmp = l->next->next;
@@ -264,7 +281,7 @@ List filtrare_mediana(List l, int k, int* nrPerechi)
 {
 	List lst, new_list;
 	List tmp, aux; // pentru parcurgere
-	int n, i, j, ok;
+	int i, j, ok;
 	ok = 0; // noua lista nu contine niciun element
 	double mid;
 
@@ -290,7 +307,7 @@ List filtrare_mediana(List l, int k, int* nrPerechi)
 		else
 			lst = addLast(lst, tmp->next->next->timestamp, mid);		
 		tmp = tmp->next;
-		new_list = deleteList(new_list);
+		deleteList(new_list);
 	}
 
 	*nrPerechi = *nrPerechi - k + 1;
@@ -301,7 +318,6 @@ List filtrare_mediana(List l, int k, int* nrPerechi)
 List uniformizare(List l)
 {
 	List tmp;
-	int i;
 
 	tmp = l->next;
 	while (tmp != NULL)
@@ -382,9 +398,9 @@ void bonus(List l, char text[])
 {
 	// extragerea intervalului de timp din argument
 	char p[30];
-	int i, x, k, aux;
+	int x, aux;
 	List tmp, end; // pentru parcurgerea listelor
-	List lst, list, q, endp;
+	List lst, list, q;
 	strcpy(p, text + 4);
 	x = atoi(p); // intervalul de timp
 
