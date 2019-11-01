@@ -1,2 +1,2 @@
-# SD_tema1
-SD_tema1
+# Data_Cleansing
+Correction/Removing the Exceptions and Sequential Data Autocompletion
